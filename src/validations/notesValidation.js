@@ -17,7 +17,7 @@ export const getAllNotesSchema = {
 };
 
 // Схема для перевірки параметра noteId
-export const noteIdParamSchema = {
+export const noteIdSchema = {
   [Segments.PARAMS]: Joi.object({
     noteId: Joi.string().custom(objectIdValidator).required(),
   }),
@@ -37,8 +37,8 @@ export const createNoteSchema = {
     noteId: Joi.string().custom(objectIdValidator).required(),
   }),
   [Segments.BODY]: Joi.object({
-    title: Joi.string().min(1).required(),
+    title: Joi.string().min(1),
     content: Joi.string().allow(''),
     tag: Joi.string().valid(...TAGS),
-  }).min(1), // важливо: не дозволяємо порожнє тіло
+  }).or('title', 'content', 'tag'), // важливо: не дозволяємо порожнє тіло
 };
