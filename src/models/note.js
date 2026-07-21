@@ -1,9 +1,14 @@
-import { Schema } from 'mongoose';
-import { model } from 'mongoose';
+import { Schema, model } from "mongoose";
+
 import { TAGS } from '../constants/tags.js';
 
 const noteSchema = new Schema(
   {
+    userId: {
+  type: Schema.Types.ObjectId,
+  ref: 'User',
+  required: true,
+},
     title: {
       type: String,
       required: true,
@@ -28,6 +33,8 @@ const noteSchema = new Schema(
   },
 );
 
-noteSchema.index({tag: 1});
+// Оновлюємо індекс полем userId
+// Тому що будемо використовувати його при пошуку
+noteSchema.index({ userId: 1, tag: 1 });
 
 export const Note = model('Note', noteSchema);
