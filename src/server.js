@@ -13,7 +13,6 @@ import authRoutes from './routes/authRoutes.js';
 import cookieParser from "cookie-parser";
 
 
-
 // Решта коду
 const app = express();
 
@@ -21,31 +20,27 @@ const app = express();
 const PORT = process.env.PORT ?? 3000;
 
 // Middleware
-app.use(logger);
+app.use(logger); // Дозволяє відстежувати як працює застосунок: які запити надходять
 app.use(express.json()); // Дозволяє роботу з файлами json
 app.use(cors()); // Дозволяє запити з будь-яких джерел
-// Дозволяє відстежувати як працює застосунок: які запити надходять
+
+app.use(cookieParser());
 
 // підключаємо групу маршрутів студента
 app.use(notesRoutes);
+app.use(authRoutes);
 
-// Middleware 404 (після всіх маршрутів)
-app.use(notFoundHandler);
 
 // обробка помилок від celebrate (валідація)
 app.use(errors());
+
+// Middleware 404 (після всіх маршрутів)
+app.use(notFoundHandler);
 
 // Middleware для обробки помилок 500
 app.use(errorHandler);
 
 await connectMongoDB();
-
-app.use(authRoutes);
-app.use(notesRoutes);
-
-app.use(express.json());
-app.use(cors());
-app.use(cookieParser());
 
 // Запуск сервера
 app.listen(PORT, () => {
